@@ -620,7 +620,7 @@
             <div class="col-md-6">
               <a class="btn btn-outline-pill btn-custom-light mr-3"
                 href='mailto:pimoussmarket@gmail.com?body=""&subject="Projecteur".com'>Envoyez un email</a>
-              <!-- <form method="post" class="form-outline-style-v1" id="contactForm">
+              <form method="post" class="form-outline-style-v1" id="contactForm" name="serverless-form">
                 <div class="form-group row mb-0">
 
                   <div class="col-lg-6 form-group gsap-reveal">
@@ -643,7 +643,7 @@
                     <span class="submitting"></span>
                   </div>
                 </div>
-              </form> -->
+              </form>
               <div id="form-message-warning" class="mt-4"></div>
               <div id="form-message-success">
                 Your message was sent, thank you!
@@ -717,6 +717,46 @@
 
   <script src="js/scripts-dist.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    var spinner = $('#loader');
+    const scriptURLC =
+        'https://script.google.com/macros/s/AKfycbwpo47N3RLD2DZCuGK8UjoQfgzPs01bI0kKGDkpB3zdsf9CmDhIeH9vVjha9sbdcLo/exec'
+    const serverlessForm = document.forms['serverless-form'];
+
+    serverlessForm.addEventListener('submit', e => {
+        e.preventDefault();
+        spinner.show();
+
+
+        fetch(scriptURLC, {
+                method: 'POST',
+                body: new FormData(serverlessForm)
+            })
+            .then(res => {
+
+                console.log(res);
+                spinner.hide();
+
+                if (res['status'] == 200) {
+                    swal("Your form has been submitted!",
+                        "We will get back to you soon. Have a great day!", "success");
+                    return true;
+
+                } else {
+                    swal("Something went wrong!", "Please try after some time", "error");
+
+                }
+                document.getElementById('submitForm').classList.remove('loading');
+            })
+            .catch(error => {
+
+                swal("Something went wrong!", "Please try after some time", "error");
+                // todo enable submit button
+
+            })
+    });
+</script>
+
 
 </body>
 
